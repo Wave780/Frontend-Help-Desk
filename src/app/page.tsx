@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { signUp } from "@/lib/api";
 
 // Logo icon (Help Desk Pro brand mark)
 function LogoIcon() {
@@ -79,10 +80,18 @@ function FormField({
   label,
   placeholder,
   type = "text",
+  name,
+  value,
+  onChange,
+  required = false,
 }: {
   label: string;
   placeholder: string;
   type?: string;
+  name: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
 }) {
   return (
     <div className="flex flex-col items-stretch gap-1">
@@ -91,8 +100,12 @@ function FormField({
       </label>
       <input
         type={type}
+        name={name}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E]/50 placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
+        value={value}
+        onChange={onChange}
+        required={required}
+        className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E] placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
       />
     </div>
   );
@@ -129,7 +142,21 @@ function SectionHeader({
 }
 
 export default function Home() {
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({
+    organizationName: "",
+    address: "",
+    name: "",
+    email: "",
+    password: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
   // Calculate password strength (0-4)
   const getPasswordStrength = (pwd: string) => {
@@ -141,7 +168,34 @@ export default function Home() {
     return strength;
   };
 
-  const strength = getPasswordStrength(password);
+  const strength = getPasswordStrength(formData.password);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      const result = await signUp({
+        organizationName: formData.organizationName,
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        address: formData.address || undefined,
+      });
+
+      // Store tokens in localStorage for future API calls
+      localStorage.setItem("accessToken", result.accessToken);
+      localStorage.setItem("refreshToken", result.refreshToken);
+
+      setSuccess(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Signup failed");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-[#F8F9FF]">
@@ -172,16 +226,50 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Success Message */}
+          {success && (
+            <div className="rounded-lg border border-green-200 bg-green-50 p-4 text-sm text-green-700">
+              <p className="font-medium">Workspace created successfully!</p>
+              <p className="mt-1">
+                Your organization and admin account are ready. You can now sign
+                in.
+              </p>
+            </div>
+          )}
+
+          {/* Error Message */}
+          {error && (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              {error}
+            </div>
+          )}
+
           {/* Main Form Card */}
-          <div className="rounded-xl border border-[#D4C3BA] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.03),0px_1px_3px_0px_rgba(0,0,0,0.05)]">
+          <form
+            onSubmit={handleSubmit}
+            className="rounded-xl border border-[#D4C3BA] bg-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.03),0px_1px_3px_0px_rgba(0,0,0,0.05)]"
+          >
             <div className="flex flex-col items-stretch gap-8 p-8">
               {/* Step 1: Organization Info */}
               <div className="flex flex-col items-stretch gap-4">
                 <SectionHeader number="1" title="Organization Info" active />
 
                 <div className="flex flex-col items-stretch gap-4">
-                  <FormField label="Organization Name" placeholder="e.g. Acme Corp Holdings" />
-                  <FormField label="Headquarters Address" placeholder="City, Country" />
+                  <FormField
+                    label="Organization Name"
+                    placeholder="e.g. Acme Corp Holdings"
+                    name="organizationName"
+                    value={formData.organizationName}
+                    onChange={handleChange}
+                    required
+                  />
+                  <FormField
+                    label="Headquarters Address"
+                    placeholder="City, Country"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
@@ -221,8 +309,12 @@ export default function Home() {
                       </label>
                       <input
                         type="text"
+                        name="name"
                         placeholder="Jane Doe"
-                        className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E]/50 placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E] placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
                       />
                     </div>
                     <div className="flex flex-1 flex-col items-stretch gap-1">
@@ -231,8 +323,12 @@ export default function Home() {
                       </label>
                       <input
                         type="email"
+                        name="email"
                         placeholder="jane@acmecorp.com"
-                        className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E]/50 placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E] placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
                       />
                     </div>
                   </div>
@@ -243,10 +339,12 @@ export default function Home() {
                     </label>
                     <input
                       type="password"
+                      name="password"
                       placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E]/50 placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="w-full rounded-lg border border-[#82746D] bg-white px-4 py-2.5 text-sm text-[#50453E] placeholder:text-[#50453E]/50 focus:border-[#76553E] focus:outline-none focus:ring-1 focus:ring-[#76553E]/30"
                     />
                     <div className="flex flex-col items-stretch pt-2">
                       <div className="flex items-stretch justify-center gap-1">
@@ -279,10 +377,11 @@ export default function Home() {
             {/* Form Actions Footer */}
             <div className="flex flex-col items-center gap-4 border-t border-[#D4C3BA] bg-[#EFF4FF] p-6">
               <button
-                type="button"
-                className="h-10 w-full rounded-lg bg-[#76553E] text-xs font-medium tracking-[0.02em] text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-[#6a4c38] focus:outline-none focus:ring-2 focus:ring-[#76553E]/30"
+                type="submit"
+                disabled={isSubmitting}
+                className="h-10 w-full rounded-lg bg-[#76553E] text-xs font-medium tracking-[0.02em] text-white shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05)] transition-colors hover:bg-[#6a4c38] focus:outline-none focus:ring-2 focus:ring-[#76553E]/30 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                Create your Help Desk
+                {isSubmitting ? "Creating..." : "Create your Help Desk"}
               </button>
               <div className="flex items-center gap-1">
                 <span className="text-[13px] leading-[18px] text-[#50453E]">
@@ -297,7 +396,7 @@ export default function Home() {
                 <ArrowRightIcon />
               </div>
             </div>
-          </div>
+          </form>
 
           {/* Trust Row */}
           <div className="flex flex-col items-stretch pt-4">
