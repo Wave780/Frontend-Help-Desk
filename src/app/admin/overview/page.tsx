@@ -172,12 +172,12 @@ const MoreVerticalIcon = ({ size = 18 }: { size?: number }) => (
   </Svg>
 );
 
-const ArrowUpIcon = ({ size = 14 }: { size?: number }) => (
-  <Svg size={size} viewBox="0 0 24 24">
-    <path d="M12 19V5" />
-    <polyline points="5 12 12 5 19 12" />
-  </Svg>
-);
+// const ArrowUpIcon = ({ size = 14 }: { size?: number }) => (
+//   <Svg size={size} viewBox="0 0 24 24">
+//     <path d="M12 19V5" />
+//     <polyline points="5 12 12 5 19 12" />
+//   </Svg>
+// );
 // ---- Sidebar Navigation ----
 
 const navItems = [
@@ -281,8 +281,8 @@ type StatCardProps = {
 function StatCard({
   label,
   value,
-  delta,
-  positive,
+  // delta,
+  // positive,
   badgeClass,
   iconClass,
   icon,
