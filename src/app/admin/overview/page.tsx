@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import RequireSuperAdmin from "../RequireSuperAdmin";
 import {
   getAdminMetricsSummary,
   getOrganizationGrowth,
@@ -34,23 +33,6 @@ function Svg({
       xmlns="http://www.w3.org/2000/svg"
     >
       {children}
-    </svg>
-  );
-}
-
-function BrandStar({ size = 18, color = "currentColor" }: { size?: number; color?: string }) {
-  return (
-    <svg
-      width={size}
-      height={size * 0.9}
-      viewBox="0 0 26.67 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M13.335 0L16.32 8.21L25.07 8.21L18.03 13.39L21.02 21.6L13.335 16.42L5.65 21.6L8.64 13.39L1.6 8.21L10.35 8.21L13.335 0Z"
-        fill={color}
-      />
     </svg>
   );
 }
@@ -99,48 +81,6 @@ const LandmarkIcon = ({ size = 18 }: { size?: number }) => (
   </Svg>
 );
 
-const GridIcon = ({ size = 18 }: { size?: number }) => (
-  <Svg size={size} viewBox="0 0 24 24">
-    <rect width="7" height="7" x="3" y="3" rx="1" />
-    <rect width="7" height="7" x="14" y="3" rx="1" />
-    <rect width="7" height="7" x="14" y="14" rx="1" />
-    <rect width="7" height="7" x="3" y="14" rx="1" />
-  </Svg>
-);
-
-const LayersIcon = ({ size = 18 }: { size?: number }) => (
-  <Svg size={size} viewBox="0 0 24 24">
-    <path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" />
-    <path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" />
-    <path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" />
-  </Svg>
-);
-
-const SettingsGearIcon = ({ size = 18 }: { size?: number }) => (
-  <Svg size={size} viewBox="0 0 24 24">
-    <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-    <circle cx="12" cy="12" r="3" />
-  </Svg>
-);
-
-const FileTextIcon = ({ size = 18 }: { size?: number }) => (
-  <Svg size={size} viewBox="0 0 24 24">
-    <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" />
-    <path d="M14 2v4a2 2 0 0 0 2 2h4" />
-    <path d="M10 9H8" />
-    <path d="M16 13H8" />
-    <path d="M16 17H8" />
-  </Svg>
-);
-
-const LogOutIcon = ({ size = 18 }: { size?: number }) => (
-  <Svg size={size} viewBox="0 0 24 24">
-    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
-    <polyline points="16 17 21 12 16 7" />
-    <line x1="21" x2="9" y1="12" y2="12" />
-  </Svg>
-);
-
 const CalendarIcon = ({ size = 18 }: { size?: number }) => (
   <Svg size={size} viewBox="0 0 24 24">
     <path d="M8 2v4" />
@@ -178,93 +118,6 @@ const MoreVerticalIcon = ({ size = 18 }: { size?: number }) => (
 //     <polyline points="5 12 12 5 19 12" />
 //   </Svg>
 // );
-// ---- Sidebar Navigation ----
-
-const navItems = [
-  { label: "Overview", icon: <GridIcon size={18} />, active: true },
-  { label: "Organizations", icon: <BuildingIcon size={18} />, active: false },
-  { label: "Plans", icon: <LayersIcon size={18} />, active: false },
-  { label: "Users", icon: <UsersIcon size={18} />, active: false },
-  { label: "Settings", icon: <SettingsGearIcon size={18} />, active: false },
-];
-
-const footerItems = [
-  { label: "Global Logs", icon: <FileTextIcon size={18} /> },
-  { label: "Logout", icon: <LogOutIcon size={18} /> },
-];
-
-function NavLink({
-  icon,
-  label,
-  active = false,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  active?: boolean;
-}) {
-  return (
-    <a
-      href="#"
-      className={`flex h-9 w-full items-center gap-3 rounded-lg px-3 transition-colors ${
-        active ? "bg-[#916D54]" : "hover:bg-white/5"
-      }`}
-    >
-      <span className={active ? "text-[#FFFBFF]" : "text-[#D9E3F6]"}>
-        {icon}
-      </span>
-      <span
-        className={`text-sm leading-5 ${
-          active ? "text-[#FFFBFF] font-medium" : "text-[#D9E3F6]"
-        }`}
-      >
-        {label}
-      </span>
-    </a>
-  );
-}
-
-function Sidebar() {
-  return (
-    <aside className="hidden w-[256px] shrink-0 flex-col bg-[#27313F] lg:flex">
-      {/* Header */}
-      <div className="px-4 pt-6 pb-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#916D54]">
-            <BrandStar size={20} color="#FFFBFF" />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-xl font-semibold leading-7 text-[#FFDCC5]">
-              Admin Central
-            </span>
-            <span className="text-[11px] leading-[14px] text-[#D9E3F6]">
-              System Control
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Tabs */}
-      <nav className="flex flex-1 flex-col gap-1 px-4">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.label}
-            icon={item.icon}
-            label={item.label}
-            active={item.active}
-          />
-        ))}
-      </nav>
-
-      {/* Footer Tabs */}
-      <nav className="flex flex-col gap-1 px-4 pb-4">
-        {footerItems.map((item) => (
-          <NavLink key={item.label} icon={item.icon} label={item.label} />
-        ))}
-      </nav>
-    </aside>
-  );
-}
-
 // ---- Stat Card ----
 
 type StatCardProps = {
@@ -635,53 +488,47 @@ export default function OverviewPage() {
       : [{ label: loading ? DEFAULT_LABEL : "—", value: 0 }];
 
   return (
-    <RequireSuperAdmin>
-      <div className="flex min-h-screen bg-[#F8F9FF]">
-        <Sidebar />
+    <main className="min-w-0 flex-1 px-6 py-8 lg:px-10">
+      {/* Page Header */}
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-semibold leading-[44px] tracking-[-0.02em] text-[#121C2A]">
+            Platform Overview
+          </h1>
+          <p className="mt-1 text-sm leading-5 text-[#50453E]">
+            System-wide performance and metrics at a glance.
+          </p>
+        </div>
 
-        <main className="min-w-0 flex-1 px-6 py-8 lg:px-10">
-          {/* Page Header */}
-          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <h1 className="text-4xl font-semibold leading-[44px] tracking-[-0.02em] text-[#121C2A]">
-                Platform Overview
-              </h1>
-              <p className="mt-1 text-sm leading-5 text-[#50453E]">
-                System-wide performance and metrics at a glance.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <button className="flex h-[34px] items-center gap-2 rounded border border-[#D4C3BA] bg-[#F8F9FF] px-3 text-xs font-medium leading-4 tracking-[0.02em] text-[#121C2A] transition-colors hover:bg-white">
-                <CalendarIcon size={15} />
-                Last 30 Days
-                <ChevronDownIcon size={14} />
-              </button>
-              <button className="flex h-8 items-center gap-2 rounded bg-[#76553E] px-3 text-xs font-medium leading-4 tracking-[0.02em] text-white transition-colors hover:bg-[#6A4C38]">
-                <DownloadIcon size={14} />
-                Export Report
-              </button>
-            </div>
-          </div>
-
-          {/* Key Metrics Bento Grid */}
-          <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {cards.map((card) => (
-              <StatCard key={card.label} {...card} delta="—" positive />
-            ))}
-          </div>
-
-          {/* Charts Section */}
-          <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
-            <section className="rounded-xl border border-[#D4C3BA]/40 bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.03),0px_1px_3px_0px_rgba(0,0,0,0.05)]">
-              <OrganizationGrowthChart data={growthData} />
-            </section>
-            <section className="rounded-xl border border-[#D4C3BA]/40 bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.03),0px_1px_3px_0px_rgba(0,0,0,0.05)]">
-              <ComplaintVolumeChart />
-            </section>
-          </div>
-        </main>
+        <div className="flex items-center gap-3">
+          <button className="flex h-[34px] items-center gap-2 rounded border border-[#D4C3BA] bg-[#F8F9FF] px-3 text-xs font-medium leading-4 tracking-[0.02em] text-[#121C2A] transition-colors hover:bg-white">
+            <CalendarIcon size={15} />
+            Last 30 Days
+            <ChevronDownIcon size={14} />
+          </button>
+          <button className="flex h-8 items-center gap-2 rounded bg-[#76553E] px-3 text-xs font-medium leading-4 tracking-[0.02em] text-white transition-colors hover:bg-[#6A4C38]">
+            <DownloadIcon size={14} />
+            Export Report
+          </button>
+        </div>
       </div>
-    </RequireSuperAdmin>
+
+      {/* Key Metrics Bento Grid */}
+      <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {cards.map((card) => (
+          <StatCard key={card.label} {...card} delta="—" positive />
+        ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
+        <section className="rounded-xl border border-[#D4C3BA]/40 bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.03),0px_1px_3px_0px_rgba(0,0,0,0.05)]">
+          <OrganizationGrowthChart data={growthData} />
+        </section>
+        <section className="rounded-xl border border-[#D4C3BA]/40 bg-white p-4 shadow-[0px_1px_2px_0px_rgba(0,0,0,0.03),0px_1px_3px_0px_rgba(0,0,0,0.05)]">
+          <ComplaintVolumeChart />
+        </section>
+      </div>
+    </main>
   );
 }
